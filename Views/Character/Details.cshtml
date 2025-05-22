@@ -1,0 +1,29 @@
+﻿@model charac.Models.Character
+
+@{
+    ViewData["Title"] = "Character Details";
+}
+
+<h2>Character Details</h2>
+
+<div>
+    <h4>@Model.chName</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">Description</dt>
+        <dd class="col-sm-9">@Model.chDescription</dd>
+
+        <dt class="col-sm-3">Is Negative</dt>
+        <dd class="col-sm-9">@Model.isNegative</dd>
+
+        <dt class="col-sm-3">Subject</dt>
+        <dd class="col-sm-9">@Model.Subject?.SubName</dd>
+    </dl>
+</div>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.CharId" class="btn btn-warning">Edit</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    <a asp-controller="CharacterBiography" asp-action="ByCharacter" asp-route-id="@Model.CharId" class="btn btn-primary">CharacterBiography</a>
+
+</div>

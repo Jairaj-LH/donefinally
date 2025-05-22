@@ -1,0 +1,44 @@
+﻿@model charac.Models.Acts
+
+@{
+    ViewData["Title"] = "Create New Act";
+}
+
+<h2>Create Act</h2>
+
+<h4>Enter Act Information</h4>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="actOne" class="control-label"></label>
+        <input asp-for="actOne" class="form-control" />
+        <span asp-validation-for="actOne" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="actTwo" class="control-label"></label>
+        <input asp-for="actTwo" class="form-control" />
+        <span asp-validation-for="actTwo" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="actThree" class="control-label"></label>
+        <input asp-for="actThree" class="form-control" />
+        <span asp-validation-for="actThree" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="SubId" class="control-label"></label>
+        <select asp-for="SubId" class="form-control" asp-items="@(ViewData["SubjectId"] as SelectList)"></select>
+        <span asp-validation-for="SubId" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

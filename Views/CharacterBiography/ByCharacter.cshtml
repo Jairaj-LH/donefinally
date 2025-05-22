@@ -1,0 +1,45 @@
+﻿@model IEnumerable<charac.Models.CharacterBiography>
+
+@{
+    ViewData["Title"] = "Character Biography";
+    var characterName = ViewBag.CharacterName as string;
+    var characterId = ViewBag.CharacterId;
+}
+
+<h2>Biography for @characterName</h2>
+
+@if (!Model.Any())
+{
+    <p>No biography found for this character.</p>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Character ID</th>
+                <th>Brief Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var bio in Model)
+            {
+                <tr>
+                    <td>@bio.charId</td>
+                    <td>@bio.briefDescription</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@bio.charId" class="btn btn-sm btn-warning">Edit</a>
+                        <a asp-action="Details" asp-route-id="@bio.charId" class="btn btn-sm btn-info">Details</a>
+                        <a asp-action="Delete" asp-route-id="@bio.charId" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<a asp-action="Create" asp-route-id="@characterId" class="btn btn-primary">Add New Biography</a>
+<a asp-controller="Character" asp-action="Index" class="btn btn-secondary">Back to Characters</a>
+<a asp-controller="CompleteInfo" asp-action="Details" asp-route-id="@ViewBag.SubjectId" class="btn btn-secondary">Complete Details</a>
+

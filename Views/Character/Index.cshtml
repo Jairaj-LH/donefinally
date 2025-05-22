@@ -1,0 +1,39 @@
+﻿@model IEnumerable<charac.Models.Character>
+
+@{
+    ViewData["Title"] = "Characters";
+}
+
+<h2>Characters</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New Character</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Character Name</th>
+            <th>Description</th>
+            <th>Is Negative</th>
+            <th>Subject</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.chName</td>
+                <td>@item.chDescription</td>
+                <td>@item.isNegative</td>
+                <td>@item.Subject?.SubName</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.CharId">Details</a> |
+                    <a asp-action="Edit" asp-route-id="@item.CharId">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@item.CharId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

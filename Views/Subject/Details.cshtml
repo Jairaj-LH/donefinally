@@ -1,0 +1,20 @@
+﻿@model charac.Models.Subject
+
+@{
+    ViewData["Title"] = "Subject Details";
+}
+
+<h2>Subject Details</h2>
+
+<div>
+    <h4>@Model.SubName</h4>
+    <p><strong>Genre:</strong> @Model.SubGenre</p>
+</div>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.SubId" class="btn btn-warning">Edit</a>
+    <a asp-action="Delete" asp-route-id="@Model.SubId" class="btn btn-danger">Delete</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    <a asp-controller="Character" asp-action="BySubject" asp-route-id="@Model.SubId" class="btn btn-primary">View Characters</a>
+
+</div>

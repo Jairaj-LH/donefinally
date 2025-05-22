@@ -1,0 +1,76 @@
+﻿@model charac.ViewModels.CompleteInfoViewModel
+
+<h2>Subject: @Model.SubName</h2>
+<p><strong>Genre:</strong> @Model.SubGenre</p>
+
+<hr />
+<h3>Acts</h3>
+<ul>
+    <li><strong>Act 1:</strong> @Model.ActOne</li>
+    <li><strong>Act 2:</strong> @Model.ActTwo</li>
+    <li><strong>Act 3:</strong> @Model.ActThree</li>
+</ul>
+
+<hr />
+<h3>Characters</h3>
+@foreach (var character in Model.Characters)
+{
+    <div style="margin-bottom: 15px;">
+        <h4>@character.chName (@(character.isNegative ? "Antagonist" : "Protagonist"))</h4>
+        <p><strong>Description:</strong> @character.chDescription</p>
+        <p><strong>Biography:</strong> @character.briefDescription</p>
+    </div>
+}
+
+<hr />
+<!-- Add a button to trigger the request to Gemini API -->
+<button id="generateContentButton" style="padding: 10px 20px; background-color: #ff6a00; color: white; border: none; border-radius: 5px; cursor: pointer;">
+    Generate Content
+</button>
+
+<!-- Display the generated content here -->
+<div id="generatedContent" style="margin-top: 20px; padding: 15px; background-color: #f8f9fa; border: 1px solid #ccc;"></div>
+
+@section Scripts {
+    <script>
+        document.getElementById("generateContentButton").addEventListener("click", async function () {
+            const data = {
+                SubName: @Html.Raw(Json.Serialize(Model.SubName)),
+                SubGenre: @Html.Raw(Json.Serialize(Model.SubGenre)),
+                ActOne: @Html.Raw(Json.Serialize(Model.ActOne)),
+                ActTwo: @Html.Raw(Json.Serialize(Model.ActTwo)),
+                ActThree: @Html.Raw(Json.Serialize(Model.ActThree)),
+                Characters: @Html.Raw(Json.Serialize(Model.Characters))
+            };
+
+            try {
+                const response = await fetch('/Gemini/GenerateText', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    document.getElementById("generatedContent").innerText = "Error: " + errorText;
+                    return;
+                }
+
+                const result = await response.json();
+
+                if (result.success) {
+                    document.getElementById("generatedContent").innerText = result.response;
+                } else {
+                    document.getElementById("generatedContent").innerText = "Error: " + (result.message || "Unknown error");
+                }
+            } catch (error) {
+                document.getElementById("generatedContent").innerText = "Error: " + error.message;
+            }
+        });
+    </script>
+
+}
+
+

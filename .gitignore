@@ -1,0 +1,48 @@
+﻿# Build results
+bin/
+obj/
+out/
+*.user
+*.suo
+*.cache
+*.ilk
+*.log
+*.pdb
+*.tmp
+*.vs/
+.vscode/
+
+# Auto-generated files
+Generated_Code/
+
+# User-specific files
+*.rsuser
+
+# IIS / web server related
+*.publish.xml
+*.dbmdl
+
+# Entity Framework
+Migrations/
+
+# ASP.NET specific folders
+wwwroot/lib/
+wwwroot/node_modules/
+
+# dotnet watch & temp files
+*.swp
+*.DS_Store
+*.sln.docstates
+
+# Config files
+appsettings.json
+appsettings.Development.json
+appsettings.Production.json
+
+# Package files
+*.nupkg
+*.snupkg
+
+# Test results
+TestResults/
+*.trx

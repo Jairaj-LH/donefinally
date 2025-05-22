@@ -1,0 +1,21 @@
+﻿@model charac.Models.CharacterBiography
+
+@{
+    ViewData["Title"] = "Create Biography";
+}
+
+<h2>Create Character Biography</h2>
+
+<form asp-action="Create">
+    <div class="form-group">
+        <label asp-for="charId" class="control-label">Character</label>
+        <select asp-for="charId" class="form-control" asp-items="ViewBag.charId"></select>
+    </div>
+    <div class="form-group">
+        <label asp-for="briefDescription" class="control-label"></label>
+        <textarea asp-for="briefDescription" class="form-control"></textarea>
+        <span asp-validation-for="briefDescription" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-success">Create</button>
+    <a asp-action="Index" class="btn btn-secondary">Back</a>
+</form>

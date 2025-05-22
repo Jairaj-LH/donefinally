@@ -1,0 +1,31 @@
+﻿@model IEnumerable<charac.Models.Character>
+
+<h2>Characters for Subject: @ViewBag.SubjectName</h2>
+
+<a asp-controller="Subjects" asp-action="Details" asp-route-id="@ViewBag.SubjectId" class="btn btn-secondary">Back to Subject</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Is Negative</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var character in Model)
+        {
+            <tr>
+                <td>@character.chName</td>
+                <td>@character.chDescription</td>
+                <td>@character.isNegative</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@character.CharId" class="btn btn-info">Details</a>
+                    <a asp-action="Edit" asp-route-id="@character.CharId" class="btn btn-warning">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@character.CharId" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

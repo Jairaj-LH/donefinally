@@ -1,0 +1,43 @@
+﻿@model charac.Models.Character
+
+@{
+    ViewData["Title"] = "Create Character";
+}
+
+<h2>Create New Character</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="chName" class="control-label"></label>
+        <input asp-for="chName" class="form-control" />
+        <span asp-validation-for="chName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="chDescription" class="control-label"></label>
+        <textarea asp-for="chDescription" class="form-control"></textarea>
+        <span asp-validation-for="chDescription" class="text-danger"></span>
+    </div>
+
+    <div class="form-group form-check">
+        <input asp-for="isNegative" class="form-check-input" />
+        <label asp-for="isNegative" class="form-check-label"></label>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="SubId" class="control-label">Subject</label>
+        <select asp-for="SubId" class="form-control" asp-items="@(ViewData["Subjects"] as SelectList)">
+            <option value="">-- Select Subject --</option>
+        </select>
+        <span asp-validation-for="SubId" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

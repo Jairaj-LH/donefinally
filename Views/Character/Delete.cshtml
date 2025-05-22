@@ -1,0 +1,30 @@
+﻿@model charac.Models.Character
+
+@{
+    ViewData["Title"] = "Delete Character";
+}
+
+<h2>Delete Character</h2>
+
+<h4>Are you sure you want to delete this character?</h4>
+<hr />
+
+<dl class="row">
+    <dt class="col-sm-3">Name</dt>
+    <dd class="col-sm-9">@Model.chName</dd>
+
+    <dt class="col-sm-3">Description</dt>
+    <dd class="col-sm-9">@Model.chDescription</dd>
+
+    <dt class="col-sm-3">Is Negative</dt>
+    <dd class="col-sm-9">@Model.isNegative</dd>
+
+    <dt class="col-sm-3">Subject</dt>
+    <dd class="col-sm-9">@Model.Subject?.SubName</dd>
+</dl>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="CharId" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

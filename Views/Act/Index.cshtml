@@ -1,0 +1,39 @@
+﻿@model IEnumerable<charac.Models.Acts>
+
+@{
+    ViewData["Title"] = "Acts List";
+}
+
+<h2>Acts</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New Act</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Act 1</th>
+            <th>Act 2</th>
+            <th>Act 3</th>
+            <th>Subject</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var act in Model)
+        {
+            <tr>
+                <td>@act.actOne</td>
+                <td>@act.actTwo</td>
+                <td>@act.actThree</td>
+                <td>@act.Subject?.SubName</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@act.SubId" class="btn btn-info">Details</a>
+                    <a asp-action="Edit" asp-route-id="@act.SubId" class="btn btn-warning">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@act.SubId" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

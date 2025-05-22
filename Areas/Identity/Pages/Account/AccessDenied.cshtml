@@ -1,0 +1,12 @@
+﻿@page
+@model AccessDeniedModel
+@{
+    var returnUrl = Request.Query["ReturnUrl"];
+}
+
+<h1>Access Denied</h1>
+<p>You do not have access to this resource.</p>
+@if (!string.IsNullOrEmpty(returnUrl))
+{
+    <a href="@returnUrl">Back to the previous page</a>
+}

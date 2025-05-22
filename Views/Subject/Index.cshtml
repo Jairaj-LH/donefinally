@@ -1,0 +1,35 @@
+﻿@model IEnumerable<charac.Models.Subject>
+
+@{
+    ViewData["Title"] = "Subjects List";
+}
+
+<h2>Subjects</h2>
+
+<p>
+    <a class="btn btn-primary" asp-action="Create">Create New Subject</a>
+</p>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Subject Name</th>
+            <th>Genre</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var subject in Model)
+        {
+            <tr>
+                <td>@subject.SubName</td>
+                <td>@subject.SubGenre</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@subject.SubId" class="btn btn-info btn-sm">Details</a>
+                    <a asp-action="Edit" asp-route-id="@subject.SubId" class="btn btn-warning btn-sm">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@subject.SubId" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

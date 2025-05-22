@@ -1,0 +1,31 @@
+﻿@model charac.Models.Subject
+
+@{
+    ViewData["Title"] = "Edit Subject";
+}
+
+<h2>Edit Subject</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="SubId" />
+    <div class="form-group">
+        <label asp-for="SubName" class="control-label"></label>
+        <input asp-for="SubName" class="form-control" />
+        <span asp-validation-for="SubName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="SubGenre" class="control-label"></label>
+        <input asp-for="SubGenre" class="form-control" />
+        <span asp-validation-for="SubGenre" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">Save Changes</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
