@@ -1,0 +1,37 @@
+﻿@model charac.Models.Plotpoints
+
+@{
+    ViewData["Title"] = "Edit Plot Point";
+}
+
+<h2>Edit Plot Point</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="SubId" />
+
+    <div class="form-group">
+        <label asp-for="SubId" class="control-label">Subject</label>
+        <select asp-for="SubId" class="form-control" asp-items="@(ViewData["Subjects"] as SelectList)" disabled>
+            <option value="">-- Select Subject --</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="PlotPoint1" class="control-label"></label>
+        <input asp-for="PlotPoint1" class="form-control" />
+        <span asp-validation-for="PlotPoint1" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="PlotPoint2" class="control-label"></label>
+        <input asp-for="PlotPoint2" class="form-control" />
+        <span asp-validation-for="PlotPoint2" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

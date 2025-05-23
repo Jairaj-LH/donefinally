@@ -1,0 +1,24 @@
+﻿@model charac.Models.Plotpoints
+
+@{
+    ViewData["Title"] = "Plot Point Details";
+}
+
+<h2>Plot Point Details</h2>
+
+<div class="form-group">
+    <label>Subject Id</label>
+    <input class="form-control" value="@Model.SubId" readonly />
+</div>
+
+<div class="form-group">
+    <label>Plot Point 1</label>
+    <input class="form-control" value="@Model.PlotPoint1" readonly />
+</div>
+
+<div class="form-group">
+    <label>Plot Point 2</label>
+    <input class="form-control" value="@Model.PlotPoint2" readonly />
+</div>
+
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>

@@ -29,9 +29,9 @@
                 <td>@item.isNegative</td>
                 <td>@item.Subject?.SubName</td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@item.CharId">Details</a> |
-                    <a asp-action="Edit" asp-route-id="@item.CharId">Edit</a> |
-                    <a asp-action="Delete" asp-route-id="@item.CharId">Delete</a>
+                    <a asp-action="Details" asp-route-id="@item.CharId" class="btn btn-info btn-sm">Details</a> |
+                    <a asp-action="Edit" asp-route-id="@item.CharId" class="btn btn-warning btn-sm">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@item.CharId" class="btn btn-danger btn-sm">Delete</a>
                 </td>
             </tr>
         }

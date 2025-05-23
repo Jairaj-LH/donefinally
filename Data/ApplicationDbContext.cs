@@ -17,5 +17,6 @@ namespace charac.Data
         public DbSet<Character> Characters { get; set; }
         public DbSet<CharacterBiography> CharactersBiography { get; set; }
         public DbSet<Acts> Acts { get; set; }
+        public DbSet<Plotpoints> Plotpoints { get; set; }
     }
 }

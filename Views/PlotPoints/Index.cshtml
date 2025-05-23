@@ -1,0 +1,33 @@
+﻿@model IEnumerable<charac.Models.Plotpoints>
+
+<h2>Plot Points</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New Plot Point</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>SubId</th>
+            <th>PlotPoint1</th>
+            <th>PlotPoint2</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.SubId</td>
+                <td>@item.PlotPoint1</td>
+                <td>@item.PlotPoint2</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.SubId" class="btn btn-info btn-sm">Details</a> |
+                    <a asp-action="Edit" asp-route-id="@item.SubId" class="btn btn-warning btn-sm">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@item.SubId" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
