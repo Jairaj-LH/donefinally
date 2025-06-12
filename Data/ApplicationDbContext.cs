@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace charac.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<IdentityUser>  // Inherit from IdentityDbContext with IdentityUser
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>  // Inherit from IdentityDbContext with 
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)   // Pass the DbContextOptions to the base class (IdentityDbContext)

@@ -7,8 +7,20 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Remove="NativeLibs\libwkhtmltox.dll" />
+	  <None Remove="NativeLibs\wkhtmltox.dll" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="NativeLibs\libwkhtmltox.dll">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
+
+	<ItemGroup>
 		<!-- Azure App Service -->
 		<PackageReference Include="Azure.ResourceManager.AppService" Version="1.3.0" />
+		<PackageReference Include="DinkToPdf" Version="1.0.8" />
 
 		<!-- ✅ Updated Identity packages compatible with .NET 8 -->
 		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.11" />

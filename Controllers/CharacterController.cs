@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
+using YourNamespace.Models;
 
 namespace charac.Controllers
 {
@@ -12,10 +14,13 @@ namespace charac.Controllers
 
         //first inject dbcontext,bcz controller needs access to the database
         private readonly ApplicationDbContext _db;
+        private readonly PdfService _pdfService;
 
-        public CharacterController(ApplicationDbContext db)
+
+        public CharacterController(ApplicationDbContext db, PdfService pdfService)
         {
             _db = db;
+            _pdfService=pdfService;
         }
 
         // GET: /Character/
@@ -125,5 +130,40 @@ namespace charac.Controllers
 
             return View("BySubject", characters);
         }
+        [HttpGet("/characters/pdf")]
+        public async Task<IActionResult> GeneratePdf()
+        {
+            var characters = await _db.Characters
+                .Include(c => c.Subject)
+                .ToListAsync();
+
+            var sb = new StringBuilder();
+            sb.AppendLine("<html><head><meta charset='utf-8' /><title>Characters PDF</title>");
+            sb.AppendLine("<style>table { border-collapse: collapse; width: 100%; }");
+            sb.AppendLine("th, td { border: 1px solid #ddd; padding: 8px; }");
+            sb.AppendLine("th { background-color: #f2f2f2; }</style></head><body>");
+            sb.AppendLine("<h1>Characters List</h1>");
+            sb.AppendLine("<table>");
+            sb.AppendLine("<tr><th>ID</th><th>Name</th><th>Description</th><th>Negative?</th><th>Subject</th></tr>");
+
+            foreach (var c in characters)
+            {
+                sb.AppendLine("<tr>");
+                sb.AppendLine($"<td>{c.CharId}</td>");
+                sb.AppendLine($"<td>{c.chName}</td>");
+                sb.AppendLine($"<td>{c.chDescription}</td>");
+                sb.AppendLine($"<td>{(c.isNegative ? "Yes" : "No")}</td>");
+                sb.AppendLine($"<td>{c.Subject?.SubName ?? "N/A"}</td>");
+                sb.AppendLine("</tr>");
+            }
+
+            sb.AppendLine("</table></body></html>");
+
+            var html = sb.ToString();
+            var pdfBytes = _pdfService.GeneratePdf(html);
+
+            return File(pdfBytes, "application/pdf", "CharactersList.pdf");
+        }
+
     }
 }

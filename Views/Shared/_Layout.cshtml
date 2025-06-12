@@ -47,8 +47,8 @@
                     <!-- Right-side login/register or logout -->
                     @using Microsoft.AspNetCore.Identity
                     @using Microsoft.AspNetCore.Mvc.RazorPages
-                    @inject SignInManager<IdentityUser> SignInManager
-                    @inject UserManager<IdentityUser> UserManager
+                    @inject SignInManager<ApplicationUser > SignInManager
+                    @inject UserManager<ApplicationUser > UserManager
 
                     <ul class="navbar-nav ms-auto">
                         @if (SignInManager.IsSignedIn(User))

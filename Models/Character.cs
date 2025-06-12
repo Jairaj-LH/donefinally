@@ -10,7 +10,7 @@ namespace charac.Models
         public int CharId { get; set; }
         public string chName { get; set; }
         public string chDescription { get; set; }
-        public bool isNegative {  get; set; }
+        public bool isNegative { get; set; }
         public virtual CharacterBiography briefDescription { get; set; }
 
         // Foreign key to Subject

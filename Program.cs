@@ -1,32 +1,45 @@
 using charac.Data;
+using charac.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using DinkToPdf;
+using DinkToPdf.Contracts;
+using System.IO;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Load native library for DinkToPdf (Windows)
+// Make sure wkhtmltox.dll is placed under "NativeLibs" folder in your project and set to Copy if newer
+var context = new CustomAssemblyLoadContext();
+var nativeLibraryPath = Path.Combine(AppContext.BaseDirectory, "NativeLibs", "libwkhtmltox.dll");
+context.LoadUnmanagedLibrary(nativeLibraryPath);
+
 // Add services to the container.
 builder.Services.AddControllersWithViews(); // Only need to add this once
+
+// Register DinkToPdf services
+builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
+builder.Services.AddScoped<PdfService>();
 
 // Add DbContext to the container for your application's database
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add Identity services with Roles and token providers
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
-    options.SignIn.RequireConfirmedAccount = false;  // Set this to true if you want email confirmation
+    options.SignIn.RequireConfirmedAccount = false;
 })
 .AddEntityFrameworkStores<ApplicationDbContext>()
-.AddDefaultTokenProviders();  // Add token providers for things like password reset tokens
+.AddDefaultTokenProviders();
 
 // Add authentication and authorization services
-builder.Services.AddAuthentication()
-    .AddCookie(options =>
-    {
-        options.LoginPath = "/Identity/Account/Login";  // Path to login page
-        options.AccessDeniedPath = "/Identity/Account/AccessDenied";  // Path for access denied
-    });
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Identity/Account/Login";
+    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+});
 
 // Add Authorization policies (for roles)
 builder.Services.AddAuthorization(options =>
@@ -64,18 +77,14 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-// Use Authentication middleware
-app.UseAuthentication(); // Enables authentication
+app.UseAuthentication();
 
-// Use Authorization middleware
-app.UseAuthorization();  // Enables authorization
+app.UseAuthorization();
 
-// Add default route for controllers
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-// Add Razor Pages route for Identity pages (this is important for AccessDenied, Login, etc.)
 app.MapRazorPages();
 
 app.Run();
