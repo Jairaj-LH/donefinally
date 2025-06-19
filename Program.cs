@@ -18,6 +18,9 @@ context.LoadUnmanagedLibrary(nativeLibraryPath);
 // Add services to the container.
 builder.Services.AddControllersWithViews(); // Only need to add this once
 
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+
 // Register DinkToPdf services
 builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
 builder.Services.AddScoped<PdfService>();
@@ -52,8 +55,14 @@ builder.Services.AddAuthorization(options =>
 // Add Razor Pages support for Identity pages like AccessDenied, Login, etc.
 builder.Services.AddRazorPages();
 
+
+
 builder.Services.AddHttpClient(); // Registers IHttpClientFactory
 builder.Services.AddSingleton<IEmailSender, EmailSender>();
+
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddTransient<IEmailService, EmailService>();
+
 
 var app = builder.Build();
 

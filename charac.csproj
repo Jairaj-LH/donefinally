@@ -21,6 +21,7 @@
 		<!-- Azure App Service -->
 		<PackageReference Include="Azure.ResourceManager.AppService" Version="1.3.0" />
 		<PackageReference Include="DinkToPdf" Version="1.0.8" />
+		<PackageReference Include="MailKit" Version="4.12.1" />
 
 		<!-- ✅ Updated Identity packages compatible with .NET 8 -->
 		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.11" />
