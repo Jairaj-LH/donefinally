@@ -20,7 +20,7 @@ namespace charac.Controllers
         }
         public async Task<IActionResult> SendTestEmail()
         {
-            await _emailService.SendEmailAsync("jairajlh08@gmail.com", "Test Email", "<p>This is a test email.</p>");
+            await _emailService.SendEmailAsync("jairajlh08@gmail.com", "Test Email", "<p>Hey there, This is to inform that you have subscribed to the legendary storytelling application.Stay tuned for surprising features.</p>");
             return Content("Email Sent");
         }
         public IActionResult Index()
