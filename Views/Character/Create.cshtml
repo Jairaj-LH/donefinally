@@ -1,43 +1,40 @@
-﻿@model charac.Models.Character
+﻿@model IEnumerable<charac.Models.UserActivityHistory>
 
 @{
-    ViewData["Title"] = "Create Character";
+    ViewData["Title"] = "My Activity History";
 }
 
-<h2>Create New Character</h2>
+<h2>@ViewData["Title"]</h2>
 
-<form asp-action="Create" method="post">
-    <div class="form-group">
-        <label asp-for="chName" class="control-label"></label>
-        <input asp-for="chName" class="form-control" />
-        <span asp-validation-for="chName" class="text-danger"></span>
+@if (Model != null && Model.Any())
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Action</th>
+                <th>Description</th>
+                <th>Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var entry in Model)
+            {
+                <tr>
+                    <td>@entry.Action</td>
+                    <td>@entry.Description</td>
+                    <td>@entry.Timestamp.ToLocalTime().ToString("g")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info">
+        No activity history available.
     </div>
-
-    <div class="form-group">
-        <label asp-for="chDescription" class="control-label"></label>
-        <textarea asp-for="chDescription" class="form-control"></textarea>
-        <span asp-validation-for="chDescription" class="text-danger"></span>
-    </div>
-
-    <div class="form-group form-check">
-        <input asp-for="isNegative" class="form-check-input" />
-        <label asp-for="isNegative" class="form-check-label"></label>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="SubId" class="control-label">Subject</label>
-        <select asp-for="SubId" class="form-control" asp-items="@(ViewData["Subjects"] as SelectList)">
-            <option value="">-- Select Subject --</option>
-        </select>
-        <span asp-validation-for="SubId" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Create</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-</form>
+}
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    @* No client-side scripts needed, but keep this block for consistency *@
 }

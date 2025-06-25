@@ -1,5 +1,6 @@
 ﻿using charac.Data;
 using charac.Models;
+using charac.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,11 +12,15 @@ namespace charac.Controllers
     {
         private readonly ApplicationDbContext _db;
         private readonly ILogger<SubjectController> _logger;
+        private readonly IUserActivityLogger _activityLogger;
 
-        public SubjectController(ApplicationDbContext db, ILogger<SubjectController> logger)
+
+        public SubjectController(ApplicationDbContext db, ILogger<SubjectController> logger, IUserActivityLogger activityLogger)
         {
             _db = db;
             _logger = logger;
+            _activityLogger = activityLogger;
+
 
         }
 
@@ -51,6 +56,7 @@ namespace charac.Controllers
             _db.Add(subject);
             await _db.SaveChangesAsync();
             _logger.LogInformation("User {UserId} created a new subject: {SubjectName}", userId, subject.SubName);
+            await _activityLogger.LogAsync(userId, "Create Subject", $"Created subject: {subject.SubName}");
 
 
             return RedirectToAction("Index");

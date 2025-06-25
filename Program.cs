@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using DinkToPdf;
 using DinkToPdf.Contracts;
 using System.IO;
+using charac.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -62,6 +63,7 @@ builder.Services.AddSingleton<IEmailSender, EmailSender>();
 
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 builder.Services.AddTransient<IEmailService, EmailService>();
+builder.Services.AddScoped<IUserActivityLogger, UserActivityLogger>();
 
 
 var app = builder.Build();

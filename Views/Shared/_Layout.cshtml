@@ -54,6 +54,10 @@
                         @if (SignInManager.IsSignedIn(User))
                         {
                             <li class="nav-item">
+                                <a class="nav-link fw-bold" asp-controller="History" asp-action="MyHistory"
+                                   style="font-size: 1.2rem; color: #007bff;">My History</a>
+                            </li>
+                            <li class="nav-item">
                                 <span class="nav-link fw-bold text-dark" style="font-size: 1.1rem;">
                                     Hello, @UserManager.GetUserName(User)!
                                 </span>
@@ -66,6 +70,8 @@
                         }
                         else
                         {
+                            
+
                             <li class="nav-item">
                                 <a class="nav-link fw-bold" asp-area="Identity" asp-page="/Account/Login"
                                    style="font-size: 1.2rem; color: #007bff;">Login</a>
@@ -74,6 +80,7 @@
                                 <a class="nav-link fw-bold" asp-area="Identity" asp-page="/Account/Register"
                                    style="font-size: 1.2rem; color: #007bff;">Register</a>
                             </li>
+
                         }
                     </ul>
 
