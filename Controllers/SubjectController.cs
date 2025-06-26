@@ -52,6 +52,7 @@ namespace charac.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             subject.UserId = userId;
+            subject.CreatedAt = DateTime.UtcNow;
 
             _db.Add(subject);
             await _db.SaveChangesAsync();

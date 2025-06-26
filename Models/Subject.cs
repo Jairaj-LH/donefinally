@@ -18,6 +18,8 @@ namespace charac.Models
         // OPTIONAL: Navigation property
         [ForeignKey("UserId")]
         public virtual ApplicationUser User { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
 
         public virtual ICollection<Character> Characters { get; set; }
         public virtual ICollection<Acts> Acts { get; set; }

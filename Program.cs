@@ -64,6 +64,7 @@ builder.Services.AddSingleton<IEmailSender, EmailSender>();
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 builder.Services.AddTransient<IEmailService, EmailService>();
 builder.Services.AddScoped<IUserActivityLogger, UserActivityLogger>();
+builder.Services.AddHostedService<SubjectReminderService>();
 
 
 var app = builder.Build();
