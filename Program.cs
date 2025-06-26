@@ -65,6 +65,7 @@ builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Emai
 builder.Services.AddTransient<IEmailService, EmailService>();
 builder.Services.AddScoped<IUserActivityLogger, UserActivityLogger>();
 builder.Services.AddHostedService<SubjectReminderService>();
+builder.Services.AddHostedService<HistoryCleanupService>();
 
 
 var app = builder.Build();

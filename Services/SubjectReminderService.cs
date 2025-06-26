@@ -32,12 +32,13 @@ public class SubjectReminderService : BackgroundService
             {
                 var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-                var recentSubjects = await db.Subjects
+                // Select only subjects where EmailSent == false
+                var subjectsToEmail = await db.Subjects
                     .Include(s => s.User)
-                    .Where(s => s.CreatedAt >= DateTime.UtcNow.AddDays(-1))
-                    .ToListAsync();
+                    .Where(s => !s.EmailSent)
+                    .ToListAsync(stoppingToken);
 
-                foreach (var subject in recentSubjects)
+                foreach (var subject in subjectsToEmail)
                 {
                     if (subject.User != null && !string.IsNullOrEmpty(subject.User.Email))
                     {
@@ -52,12 +53,18 @@ public class SubjectReminderService : BackgroundService
                         await _emailService.SendEmailAsync(email, subjectLine, message);
 
                         _logger.LogInformation("Email sent to {Email} for subject {SubjectName}", email, subject.SubName);
+
+                        // Mark email as sent
+                        subject.EmailSent = true;
                     }
                 }
+
+                // Save changes to mark subjects as emailed
+                await db.SaveChangesAsync(stoppingToken);
             }
 
             // Wait before checking again — adjust timing as needed
-            await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
+            await Task.Delay(TimeSpan.FromDays(1), stoppingToken);
         }
     }
 }

@@ -20,6 +20,7 @@ namespace charac.Models
         public virtual ApplicationUser User { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
+        public bool EmailSent { get; set; } = false;
 
         public virtual ICollection<Character> Characters { get; set; }
         public virtual ICollection<Acts> Acts { get; set; }
