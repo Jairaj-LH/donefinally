@@ -7,6 +7,7 @@ using DinkToPdf;
 using DinkToPdf.Contracts;
 using System.IO;
 using charac.Services;
+using Prometheus;   // <-- Added for Prometheus
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +18,7 @@ var nativeLibraryPath = Path.Combine(AppContext.BaseDirectory, "NativeLibs", "li
 context.LoadUnmanagedLibrary(nativeLibraryPath);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews(); // Only need to add this once
+builder.Services.AddControllersWithViews();
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
@@ -26,11 +27,11 @@ builder.Logging.AddConsole();
 builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
 builder.Services.AddScoped<PdfService>();
 
-// Add DbContext to the container for your application's database
+// Add DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Add Identity services with Roles and token providers
+// Add Identity services
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
     options.SignIn.RequireConfirmedAccount = false;
@@ -38,14 +39,14 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
 
-// Add authentication and authorization services
+// Configure cookies
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Identity/Account/Login";
     options.AccessDeniedPath = "/Identity/Account/AccessDenied";
 });
 
-// Add Authorization policies (for roles)
+// Add Authorization policies
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
@@ -53,12 +54,10 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("ManagerPolicy", policy => policy.RequireRole("Manager"));
 });
 
-// Add Razor Pages support for Identity pages like AccessDenied, Login, etc.
+// Razor Pages support
 builder.Services.AddRazorPages();
 
-
-
-builder.Services.AddHttpClient(); // Registers IHttpClientFactory
+builder.Services.AddHttpClient();
 builder.Services.AddSingleton<IEmailSender, EmailSender>();
 
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
@@ -67,7 +66,6 @@ builder.Services.AddScoped<IUserActivityLogger, UserActivityLogger>();
 builder.Services.AddHostedService<SubjectReminderService>();
 builder.Services.AddHostedService<HistoryCleanupService>();
 
-
 var app = builder.Build();
 
 // Seed roles into the database
@@ -75,10 +73,10 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-    await SeedRoles(roleManager); // Seed roles at app startup
+    await SeedRoles(roleManager);
 }
 
-// Configure the HTTP request pipeline.
+// Configure HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -90,6 +88,9 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+// **Prometheus HTTP metrics middleware added here**
+app.UseHttpMetrics();  // <-- Added
+
 app.UseAuthentication();
 
 app.UseAuthorization();
@@ -100,9 +101,11 @@ app.MapControllerRoute(
 
 app.MapRazorPages();
 
+// **Expose the /metrics endpoint for Prometheus scraping**
+app.MapMetrics();  // <-- Added
+
 app.Run();
 
-// Method to seed roles
 async Task SeedRoles(RoleManager<IdentityRole> roleManager)
 {
     string[] roleNames = { "Admin", "User", "Manager" };

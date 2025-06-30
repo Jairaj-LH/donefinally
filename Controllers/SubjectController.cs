@@ -30,7 +30,7 @@ namespace charac.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             _logger.LogInformation("User {UserId} is viewing their subjects.", userId);
-
+            MetricsRegistry.MyCustomCounter.Inc();
             var subjects = await _db.Subjects
                                     .Where(s => s.UserId == userId)
                                     .ToListAsync();
