@@ -1,7 +1,12 @@
 ﻿global:
   scrape_interval: 5s
+  evaluation_interval: 1m
 
 scrape_configs:
-  - job_name: 'aspnetcore-app'
+  - job_name: aspnetcore-app
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /metrics
     static_configs:
-      - targets: ['localhost:5000']  # your app URL and port
+      - targets: ['localhost:7039']
