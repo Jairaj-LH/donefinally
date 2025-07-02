@@ -1,0 +1,10 @@
+﻿@model IEnumerable<charac.Models.Character>
+
+<h2>Antagonists (Negative Characters)</h2>
+
+<ul>
+    @foreach (var character in Model)
+    {
+        <li>@character.chName (Subject ID: @character.SubId)</li>
+    }
+</ul>

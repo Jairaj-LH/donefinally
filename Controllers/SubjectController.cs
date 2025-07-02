@@ -4,6 +4,7 @@ using charac.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 using System.Security.Claims;
 
 namespace charac.Controllers
@@ -121,6 +122,37 @@ namespace charac.Controllers
 
             return RedirectToAction("Index");
         }
+
+        //for metrics
+        [Authorize]
+        public async Task<IActionResult> Antagonists()
+        {
+            var stopwatch = Stopwatch.StartNew(); // For Prometheus timing
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var negativeCharacters = await _db.Subjects
+                .Where(s => s.UserId == userId)
+                .Include(s => s.Characters)
+                .SelectMany(s => s.Characters)
+                .Where(c => c.isNegative)
+                .Select(c => new Character
+                {
+                    CharId = c.CharId,
+                    chName = "Negative " + c.chName,
+                    isNegative = c.isNegative,
+                    SubId = c.SubId
+                })
+                .ToListAsync();
+
+            stopwatch.Stop();
+            MetricsRegistry.CharacterProcessingDuration
+                .WithLabels("Antagonists", "all") // or pass a specific subjectId if you’re filtering by one
+                .Observe(stopwatch.Elapsed.TotalSeconds);
+
+            return View(negativeCharacters); // Or return Json(negativeCharacters)
+        }
+
 
         // Allow all authenticated users to delete their subjects
         [Authorize]
