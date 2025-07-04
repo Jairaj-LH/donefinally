@@ -1,0 +1,61 @@
+﻿@model charac.Models.SWFormat
+
+@{
+    ViewData["Title"] = "Create New Scene";
+}
+
+<h2>Create New Scene</h2>
+
+<form asp-action="Create">
+    <div class="form-group">
+        <label>INT/EXT</label>
+        <input asp-for="INTOREXT" class="form-control" placeholder="INT or EXT" />
+    </div>
+
+    <div class="form-group">
+        <label>Location</label>
+        <input asp-for="Location" class="form-control" placeholder="e.g. LIVING ROOM" />
+    </div>
+
+    <div class="form-group">
+        <label>Time</label>
+        <input asp-for="Time" class="form-control" placeholder="e.g. NIGHT" />
+    </div>
+
+    <div class="form-group">
+        <label>Character Names (one per line)</label>
+        <textarea asp-for="charname" class="form-control" rows="4"
+                  placeholder="JOHN&#10;MARY&#10;JOHN"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label>Dialogues (in same order)</label>
+        <textarea asp-for="dialogue" class="form-control" rows="6"
+                  placeholder="Hey, are we leaving soon?&#10;Almost ready!&#10;Alright, I’ll wait in the car."></textarea>
+    </div>
+
+    <div class="form-group">
+        <label>Props</label>
+        <input asp-for="props" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Equips</label>
+        <input asp-for="equips" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Costumes</label>
+        <input asp-for="costumes" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Artist Involved</label>
+        <input asp-for="artistinvolved" class="form-control" />
+    </div>
+
+    <div class="form-group mt-3">
+        <input type="submit" value="Save" class="btn btn-success" />
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>

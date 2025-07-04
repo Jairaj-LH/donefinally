@@ -1,0 +1,93 @@
+﻿@model IEnumerable<charac.Models.SWFormat>
+
+@{
+    ViewData["Title"] = "All Scenes";
+}
+
+<h2>Screenwriting Cards</h2>
+
+<p>
+    <a class="btn btn-primary" asp-action="Create">Create New Scene</a>
+</p>
+
+<div class="card-container">
+    @foreach (var scene in Model)
+    {
+        var names = scene.charname?.Split('\n');
+        var lines = scene.dialogue?.Split('\n');
+
+        <div class="scene-card">
+            <div class="card-header">
+                @scene.INTOREXT - @scene.Location - @scene.Time
+            </div>
+
+            <div class="card-body">
+                @if (names != null && lines != null && names.Length == lines.Length)
+                {
+                    for (int i = 0; i < names.Length; i++)
+                    {
+                        <p>
+                            <strong>@names[i].Trim().ToUpper()</strong><br />
+                            @lines[i].Trim()
+                        </p>
+                    }
+                }
+                else
+                {
+                    <p>
+                        <strong>@scene.charname</strong><br />
+                        @scene.dialogue
+                    </p>
+                }
+            </div>
+
+            <div class="card-footer">
+                <p><strong>Props:</strong> @scene.props</p>
+                <p><strong>Equips:</strong> @scene.equips</p>
+                <p><strong>Costumes:</strong> @scene.costumes</p>
+                <p><strong>Artist:</strong> @scene.artistinvolved</p>
+            </div>
+
+            <div class="card-actions">
+                <a class="btn btn-sm btn-outline-secondary" asp-action="Edit" asp-route-id="@scene.scno">Edit</a>
+                <a class="btn btn-sm btn-outline-danger" asp-action="Delete" asp-route-id="@scene.scno">Delete</a>
+            </div>
+        </div>
+    }
+</div>
+
+<style>
+    .card-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .scene-card {
+        width: 350px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 16px;
+        background: #fff;
+        box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .card-header {
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .card-body {
+        margin-bottom: 10px;
+    }
+
+    .card-footer {
+        font-size: 0.9em;
+        color: #444;
+    }
+
+    .card-actions {
+        margin-top: 10px;
+        text-align: right;
+    }
+</style>
