@@ -4,7 +4,7 @@
     ViewData["Title"] = "All Scenes";
 }
 
-<h2>Screenwriting Cards</h2>
+<h2> Cards</h2>
 
 <p>
     <a class="btn btn-primary" asp-action="Create">Create New Scene</a>
@@ -26,12 +26,13 @@
                 {
                     for (int i = 0; i < names.Length; i++)
                     {
-                        <p>
-                            <strong>@names[i].Trim().ToUpper()</strong><br />
-                            @lines[i].Trim()
-                        </p>
+                        <div class="script-block">
+                            <div class="character-name">@names[i].Trim().ToUpper()</div>
+                            <div class="dialogue-line">@lines[i].Trim()</div>
+                        </div>
                     }
                 }
+
                 else
                 {
                     <p>

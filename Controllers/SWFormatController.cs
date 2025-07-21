@@ -83,7 +83,7 @@ namespace charac.Controllers
             {
                 return NotFound();
             }
-            var swFormat = _db.SWFormat.FirstOrDefaultAsync(m => m.scno == id);
+            var swFormat = await _db.SWFormat.FirstOrDefaultAsync(m => m.scno == id);
 
             if (swFormat == null) return NotFound();
 
@@ -94,12 +94,36 @@ namespace charac.Controllers
         {
             if(id==null) return NotFound();
 
-            var swFormat=_db.SWFormat.FirstOrDefaultAsync(m=> m.scno == id);
+            var swFormat= await _db.SWFormat.FirstOrDefaultAsync(m=> m.scno == id);
             _db.Remove(swFormat);
             await _db.SaveChangesAsync();
 
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
+        public IActionResult GroupedByLocation()
+        {
+            var groupedScenes = _db.SWFormat
+                .GroupBy(s => s.Location)
+                .Select(group => new SceneGroupViewModel
+                {
+                    Location = group.Key,
+                    Scenes = group.Select(s => new SceneViewModel
+                    {
+                        scno = s.scno,
+                        INTOREXT = s.INTOREXT,
+                        Time = s.Time,
+                        charname = s.charname,
+                        dialogue = s.dialogue,
+                        props = s.props,
+                        equips = s.equips,
+                        costumes = s.costumes,
+                        artistinvolved = s.artistinvolved
+                    }).ToList()
+                }).ToList();
+
+            return View(groupedScenes); // Looks for Views/Scene/GroupedByLocation.cshtml
+        }
     }
 }

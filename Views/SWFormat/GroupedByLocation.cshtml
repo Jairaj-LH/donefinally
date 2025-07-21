@@ -1,0 +1,45 @@
+﻿@model List<charac.Models.SceneGroupViewModel>
+
+@{
+    ViewData["Title"] = "Scenes Grouped by Location";
+}
+
+<h1>Scenes Grouped by Location</h1>
+
+@foreach (var group in Model)
+{
+    <div class="location-group">
+        <h2>@group.Location</h2>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Scene No</th>
+                    <th>INT/EXT</th>
+                    <th>Time</th>
+                    <th>Character</th>
+                    <th>Dialogue</th>
+                    <th>Props</th>
+                    <th>Equips</th>
+                    <th>Costumes</th>
+                    <th>Artist Involved</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var scene in group.Scenes)
+                {
+                    <tr>
+                        <td>@scene.scno</td>
+                        <td>@scene.INTOREXT</td>
+                        <td>@scene.Time</td>
+                        <td>@scene.charname</td>
+                        <td>@scene.dialogue</td>
+                        <td>@scene.props</td>
+                        <td>@scene.equips</td>
+                        <td>@scene.costumes</td>
+                        <td>@scene.artistinvolved</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
