@@ -20,5 +20,9 @@ namespace charac.Data
         public DbSet<Plotpoints> Plotpoints { get; set; }
         public DbSet<UserActivityHistory> UserActivityHistories { get; set; }
         public DbSet<SWFormat> SWFormat { get; set; }
+        public DbSet<Feedback> Feedbacks { get; set; }
+        public DbSet<FeedbackLike> FeedbackLikes { get; set; }
+
+
     }
 }

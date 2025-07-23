@@ -1,0 +1,133 @@
+﻿@model List<charac.Models.Feedback>
+@{
+    ViewData["Title"] = "Live Feedback Chat";
+}
+
+<h2>Live Feedback Chat</h2>
+
+<div>
+    <input type="text" id="username" placeholder="Your name" class="form-control mb-2" />
+    <textarea id="messageInput" placeholder="Write a message" class="form-control mb-2"></textarea>
+    <button id="sendButton" class="btn btn-primary">Send</button>
+</div>
+
+<hr />
+<div id="messagesList" class="mt-4">
+    @foreach (var item in Model)
+    {
+        <div class="card mb-2 shadow-sm" data-feedback-id="@item.Id">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <strong>@item.Username</strong>
+                    <small class="text-muted">@item.Timestamp.ToShortTimeString()</small>
+                    <button class="btn btn-sm like-button btn-outline-secondary" data-id="@item.Id">
+                        👍 Like (<span class="like-count">@item.Likes</span>)
+                    </button>
+                </div>
+                <p>@item.Message</p>
+                <div>
+                    <button class="btn btn-sm btn-outline-primary">💬 Reply</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+
+    <script>
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/feedbackHub")
+            .build();
+
+        // Reusable function to handle like/unlike
+        function attachLikeHandler(button) {
+            button.addEventListener("click", function () {
+                const feedbackId = parseInt(button.getAttribute("data-id"));
+                if (!feedbackId) return;
+
+                button.disabled = true;
+
+                fetch('/Feedback/Like', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: feedbackId })
+                })
+                .then(res => res.ok ? res.json() : Promise.reject("Like failed"))
+                .then(data => {
+                    const countSpan = button.querySelector(".like-count");
+                    if (countSpan) countSpan.textContent = data.likes;
+
+                    // Toggle button class based on like status
+                    if (data.userLiked) {
+                        button.classList.add("btn-success");
+                        button.classList.remove("btn-outline-secondary");
+                    } else {
+                        button.classList.remove("btn-success");
+                        button.classList.add("btn-outline-secondary");
+                    }
+
+                    button.innerHTML = `👍 Like (<span class="like-count">${data.likes}</span>)`;
+                })
+                .catch(err => console.error("Like error:", err))
+                .finally(() => {
+                    button.disabled = false;
+                });
+            });
+        }
+
+        // Receive messages from SignalR
+        connection.on("ReceiveMessage", function (user, message, id, likes) {
+            const card = document.createElement("div");
+            card.className = "card mb-2 shadow-sm";
+            card.setAttribute("data-feedback-id", id);
+            card.innerHTML = `
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <strong>${user}</strong>
+                        <small class="text-muted">${new Date().toLocaleTimeString()}</small>
+                        <button class="btn btn-sm like-button btn-outline-secondary" data-id="${id}">
+                            👍 Like (<span class="like-count">${likes}</span>)
+                        </button>
+                    </div>
+                    <p>${message}</p>
+                    <div>
+                        <button class="btn btn-sm btn-outline-primary">💬 Reply</button>
+                    </div>
+                </div>`;
+
+            document.getElementById("messagesList").prepend(card);
+
+            const newLikeBtn = card.querySelector(".like-button");
+            attachLikeHandler(newLikeBtn);
+        });
+
+        connection.start().catch(err => console.error("SignalR connection failed:", err));
+
+        // Submit feedback
+        document.getElementById("sendButton").addEventListener("click", function () {
+            const user = document.getElementById("username").value.trim();
+            const message = document.getElementById("messageInput").value.trim();
+
+            if (user && message) {
+                fetch('/Feedback/Submit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: user, message: message })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    connection.invoke("SendMessage", data.username, data.message, data.id, data.likes);
+                });
+
+                document.getElementById("messageInput").value = '';
+            }
+        });
+
+        // Attach handlers to existing like buttons
+        document.querySelectorAll('.like-button').forEach(btn => {
+            attachLikeHandler(btn);
+        });
+    </script>
+}

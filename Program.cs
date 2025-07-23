@@ -7,6 +7,7 @@ using DinkToPdf;
 using DinkToPdf.Contracts;
 using System.IO;
 using charac.Services;
+using charac.Hubs;
 using Prometheus;   // <-- Added for Prometheus
 
 var builder = WebApplication.CreateBuilder(args);
@@ -65,6 +66,7 @@ builder.Services.AddTransient<IEmailService, EmailService>();
 builder.Services.AddScoped<IUserActivityLogger, UserActivityLogger>();
 builder.Services.AddHostedService<SubjectReminderService>();
 builder.Services.AddHostedService<HistoryCleanupService>();
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -82,6 +84,9 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
+
+
+app.MapHub<FeedbackHub>("/feedbackHub");
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
